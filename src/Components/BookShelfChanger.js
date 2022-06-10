@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+
 class BookShelfChanger extends Component {
   render() {
+    const { book, onAddOrRemoveBook } = this.props;
     const bookStatusOptions = [
       { value: "currentlyReading", text: "Currently Reading" },
       { value: "wantToRead", text: "Want to Read" },
@@ -8,22 +10,20 @@ class BookShelfChanger extends Component {
       { value: "none", text: "None" },
     ];
     const handlerBookshelfChange = (e) => {
-      let updatedStatusBook = this.props.book;
+      let updatedStatusBook = book;
       updatedStatusBook.shelf = e.target.value;
-      this.props.onAddOrRemoveBook(updatedStatusBook);
+      onAddOrRemoveBook(updatedStatusBook);
     };
     return (
       <div className="book-shelf-changer">
-        <select onChange={handlerBookshelfChange} value={this.props.book.shelf}>
+        <select onChange={handlerBookshelfChange} value={book.shelf}>
           <option value="move" disabled>
             Move to...
           </option>
           {bookStatusOptions.map((option) => {
             return (
               <option key={option.value} value={option.value}>
-                {this.props.book.shelf === option.value
-                  ? `✔ ${option.text}`
-                  : option.text}
+                {book.shelf === option.value ? `✔ ${option.text}` : option.text}
               </option>
             );
           })}
@@ -32,4 +32,5 @@ class BookShelfChanger extends Component {
     );
   }
 }
+
 export default BookShelfChanger;

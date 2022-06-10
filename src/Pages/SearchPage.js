@@ -1,18 +1,20 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Book from "../Components/Book";
 import * as BookAPI from "../utils/BookAPI";
 
 class SearchPage extends Component {
   state = {
+    query: "",
     searchResult: [],
   };
 
-  render() {
-    const handlerSearchInput = async (event) => {
-      let searchInputValue = event.target.value.trim();
-      if (searchInputValue !== "") {
-        let searchResultContent = await BookAPI.search(searchInputValue);
+  handlerSearchInput = async (event) => {
+    try {
+      await this.setState({ query: event.target.value });
+      if (this.state.query !== "") {
+        let searchResultContent = await BookAPI.search(this.state.query.trim());
         if (!searchResultContent.error) {
           if (searchResultContent.length > 0) {
             searchResultContent = searchResultContent.map((book) => ({
@@ -27,16 +29,20 @@ class SearchPage extends Component {
                 bookInShelf.shelf = book.shelf;
               }
             });
-            this.setState(() => ({ searchResult: searchResultContent }));
+            await this.setState({ searchResult: searchResultContent });
           }
         } else {
-          this.setState([]);
+          await this.setState({ searchResult: [] });
         }
       } else {
-        this.setState([]);
+        await this.setState({ searchResult: [] });
       }
-    };
+    } catch (error) {
+      await this.setState({ searchResult: [] });
+    }
+  };
 
+  render() {
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -56,7 +62,8 @@ class SearchPage extends Component {
             <input
               type="text"
               id="search-input"
-              onChange={handlerSearchInput}
+              value={this.state.query}
+              onChange={this.handlerSearchInput}
               placeholder="Search by title or author"
             />
           </div>
@@ -84,4 +91,10 @@ class SearchPage extends Component {
     );
   }
 }
+
+SearchPage.propTypes = {
+  books: PropTypes.array,
+  onAddOrRemoveBook: PropTypes.func.isRequired,
+};
+
 export default SearchPage;

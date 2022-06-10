@@ -25,16 +25,17 @@ class App extends Component {
         if (bookNeedUpdate.shelf === "none") {
           if (BookAPI.update(bookNeedUpdate, "none")) {
             this.setState((currentState) => ({
-              books: currentState.books.filter((b) => {
-                return b.id !== book.id;
-              }),
+              books: [...currentState.books.filter((b) => b.id !== book.id)],
             }));
           }
         } else {
           bookNeedUpdate.shelf = book.shelf;
           if (BookAPI.update(bookNeedUpdate, book.shelf)) {
             this.setState((currentState) => ({
-              books: [...currentState.books],
+              books: [
+                ...currentState.books.filter((b) => b.id !== book.id),
+                book,
+              ],
             }));
           }
         }
@@ -81,9 +82,7 @@ class App extends Component {
               element={
                 <SearchPage
                   books={this.state.books}
-                  onAddOrRemoveBook={(book) => {
-                    this.onAddOrRemoveBook(book);
-                  }}
+                  onAddOrRemoveBook={this.onAddOrRemoveBook}
                 />
               }
             />
@@ -92,9 +91,7 @@ class App extends Component {
               element={
                 <MainPage
                   books={this.state.books}
-                  onAddOrRemoveBook={(book) => {
-                    this.onAddOrRemoveBook(book);
-                  }}
+                  onAddOrRemoveBook={this.onAddOrRemoveBook}
                 />
               }
             />

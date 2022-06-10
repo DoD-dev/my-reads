@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import BookShelf from "../Components/BookShelf";
 import { Link } from "react-router-dom";
 
 class MainPage extends Component {
   render() {
+    const { books, onAddOrRemoveBook } = this.props;
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -13,30 +15,22 @@ class MainPage extends Component {
           <div>
             <BookShelf
               title="Currently Reading"
-              books={this.props.books
+              books={books
                 ?.filter((book) => book.shelf === "currentlyReading")
                 .sort()}
-              onAddOrRemoveBook={(book) => {
-                this.props.onAddOrRemoveBook(book);
-              }}
+              onAddOrRemoveBook={onAddOrRemoveBook}
             />
             <BookShelf
               title="Want to Read"
-              books={this.props.books
+              books={books
                 ?.filter((book) => book.shelf === "wantToRead")
                 .sort()}
-              onAddOrRemoveBook={(book) => {
-                this.props.onAddOrRemoveBook(book);
-              }}
+              onAddOrRemoveBook={onAddOrRemoveBook}
             />
             <BookShelf
               title="Read"
-              books={this.props.books
-                ?.filter((book) => book.shelf === "read")
-                .sort()}
-              onAddOrRemoveBook={(book) => {
-                this.props.onAddOrRemoveBook(book);
-              }}
+              books={books?.filter((book) => book.shelf === "read").sort()}
+              onAddOrRemoveBook={onAddOrRemoveBook}
             />
           </div>
         </div>
@@ -47,5 +41,10 @@ class MainPage extends Component {
     );
   }
 }
+
+MainPage.propTypes = {
+  books: PropTypes.array,
+  onAddOrRemoveBook: PropTypes.func.isRequired,
+};
 
 export default MainPage;
