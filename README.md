@@ -2,8 +2,6 @@
 
 This is my first project for Udacity's React Fundamentals course.
 
-## TL;DR
-
 To get started developing right away:
 
 * install all project dependencies with `npm install`
@@ -11,5 +9,5 @@ To get started developing right away:
 
 ## Backend Server
 
-Using https://reactnd-books-api.udacity.com
+Using https://reactnd-books-api.udacity.com from udacity
 
